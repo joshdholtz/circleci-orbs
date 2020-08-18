@@ -1,0 +1,26 @@
+version: 2.1
+description: "Setup SDKMAN! and install SDKs"
+
+commands:
+  setup-sdkman:
+    steps:
+      - run:
+          name: Installing SDKMAN!
+          command: |
+            curl -s "https://get.sdkman.io" | bash
+            echo sdkman_auto_answer=true > $HOME/.sdkman/etc/config
+            echo sdkman_auto_selfupdate=true >> $HOME/.sdkman/etc/config
+            source "$HOME/.sdkman/bin/sdkman-init.sh"
+            echo 'export SDKMAN_DIR="$HOME/.sdkman"' >> $BASH_ENV
+            echo 'source "$HOME/.sdkman/bin/sdkman-init.sh"' >> $BASH_ENV
+  sdkman-install:
+    parameters:
+      candidate:
+        type: string
+      version:
+        type: string
+    steps:
+      - run:
+          name: SDKMAN! installing << parameters.candidate >> << parameters.version >>
+          command: |
+            sdk install << parameters.candidate >> << parameters.version >>
